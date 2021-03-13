@@ -1,24 +1,9 @@
-# vue-tic-tac-toe
+# Vue Tic Tac Toe
 
-## Project setup
-```
-yarn install
-```
+Tic tac toe created with Vue 3.
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+## Missing features
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- AI player
+- display how many games have been played
+- display how many games has each player won

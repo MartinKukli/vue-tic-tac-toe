@@ -2,8 +2,12 @@
 
 Tic tac toe created with Vue 3.
 
+## Features:
+
+- choose your player
+- counters (games, victories)
+- automatic reset after game over
+
 ## Missing features
 
 - AI player
-- display how many games have been played
-- display how many games has each player won

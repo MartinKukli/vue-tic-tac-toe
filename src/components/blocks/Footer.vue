@@ -2,7 +2,7 @@
   <footer class="card-footer buttons is-justify-content-space-evenly">
     <Button id="X" msg="X" :type="btnX" @click="controllerClick" />
     <Button id="O" msg="O" :type="btnO" @click="controllerClick" />
-    <Button id="R" msg="Reset" :type="btnR" @click="controllerClick" />
+    <Button id="R" msg="Reset all" :type="btnR" @click="controllerClick" />
   </footer>
 </template>
 

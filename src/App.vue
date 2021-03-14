@@ -1,9 +1,10 @@
 <template>
   <div class="hero-body is-justify-content-center">
-    <div class="card p-3 minwidth">
+    <div class="card p-3">
       <Header msg="Tic Tac Toe" />
       <Board
         :cells="cells"
+        :counter="counter"
         :showNotification="displayNotification"
         :notificationMessage="notificationMessage"
         @cellClick="updateCell"
@@ -23,6 +24,7 @@
 import Header from "./components/blocks/Header";
 import Board from "./components/blocks/Board";
 import Footer from "./components/blocks/Footer";
+import * as helpers from "./helpers/index";
 
 export default {
   name: "App",
@@ -32,22 +34,7 @@ export default {
     Footer,
   },
   data() {
-    return {
-      hasWinner: false,
-      isGameOver: false,
-      currentPlayer: undefined,
-      cells: [
-        { player: "", style: "" },
-        { player: "", style: "" },
-        { player: "", style: "" },
-        { player: "", style: "" },
-        { player: "", style: "" },
-        { player: "", style: "" },
-        { player: "", style: "" },
-        { player: "", style: "" },
-        { player: "", style: "" },
-      ],
-    };
+    return helpers.gameStartingData;
   },
   computed: {
     isGameRunning() {
@@ -76,56 +63,38 @@ export default {
     choosePlayer(player) {
       this.currentPlayer = player;
     },
-    updateCell(cell) {
-      const isCellEmpty = this.cells[cell].player === "";
+    updateCell(cellId) {
+      if (this.isGameRunning || helpers.isCellEmpty(this.cells, cellId)) {
+        this.cells[cellId].player = this.currentPlayer;
 
-      if (this.isGameRunning === false || !isCellEmpty) {
-        return;
-      }
+        this.checkWinner();
 
-      this.cells[cell].player = this.currentPlayer;
+        if (this.isGameRunning) {
+          this.currentPlayer = this.currentPlayer === "X" ? "O" : "X";
+        } else {
+          this.counter.games += 1;
+          this.counter[this.currentPlayer] += 1;
 
-      this.checkWinner();
-
-      if (this.isGameRunning) {
-        this.currentPlayer = this.currentPlayer === "X" ? "O" : "X";
+          helpers.activateAfter(() => {
+            this.resetGame();
+          }, 1700);
+        }
       }
     },
     checkWinner() {
-      const windConditions = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
-      ];
+      const winConditionMatchIndex = helpers.winConditionMatchIndex(
+        this.cells,
+        this.currentPlayer
+      );
 
-      const checkWinConditions = (cond) =>
-        cond
-          .map((key) => this.cells[key])
-          .every((value) => value.player === this.currentPlayer);
-
-      const addStyle = (index) => (this.cells[index].style = "is-primary");
-
-      const allCellsFilled = this.cells.every((cell) => cell.player !== "");
-
-      const matchIndex = windConditions.map(checkWinConditions).indexOf(true);
-
-      this.hasWinner = matchIndex !== -1;
+      this.hasWinner = winConditionMatchIndex !== -1;
 
       if (this.hasWinner) {
-        windConditions[matchIndex].forEach(addStyle);
+        helpers.styleCells(this.cells, winConditionMatchIndex);
 
-        this.isGameOver = true;
+        this.isGameOver = this.hasWinner;
       } else {
-        if (allCellsFilled) {
-          this.isGameOver = true;
-
-          this.hasWinner = false;
-        }
+        this.isGameOver = this.allCellsFilled;
       }
     },
     resetGame() {
@@ -146,6 +115,12 @@ export default {
         { player: "", style: "" },
         { player: "", style: "" },
       ];
+
+      this.counter = {
+        games: 0,
+        X: 0,
+        O: 0,
+      };
     },
   },
 };

@@ -1,34 +1,26 @@
 <template>
   <div class="card-content">
-    <div class="content">
-      <Notification :msg="notificationMessage" v-show="showNotification" />
-      <div class="columns is-gapless is-justify-content-center">
-        <div class="threeColGrid">
-          <Cell
-            v-for="(value, index) in cells"
-            :key="index"
-            :id="index"
-            :args="value"
-            @click="cellClick"
-          />
-        </div>
-      </div>
-    </div>
+    <Notification :msg="notificationMessage" v-show="showNotification" />
+    <Counter :counter="counter" />
+    <Cells :cells="cells" @click="cellClick" />
   </div>
 </template>
 
 <script>
 import Notification from "../elements/Notification";
-import Cell from "../elements/Cell";
+import Cells from "../elements/Cells";
+import Counter from "../elements/Counter";
 
 export default {
   name: "Board",
   components: {
     Notification,
-    Cell,
+    Cells,
+    Counter,
   },
   props: {
     cells: Array,
+    counter: Object,
     showNotification: Boolean,
     notificationMessage: String,
   },
@@ -41,11 +33,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.threeColGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 10px;
-}
-</style>

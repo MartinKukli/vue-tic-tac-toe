@@ -121,7 +121,7 @@ export default {
 
         this.isGameOver = true;
       } else {
-        if (allCellsFilled()) {
+        if (allCellsFilled) {
           this.isGameOver = true;
 
           this.hasWinner = false;
